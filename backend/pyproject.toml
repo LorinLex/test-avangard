@@ -1,0 +1,29 @@
+[tool.poetry]
+name = "test-avangard-backend"
+version = "0.1.0"
+description = ""
+authors = ["Emil Muhitdinov <laizybot@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = {extras = ["standart"], version = "^0.115.11"}
+sqlalchemy = "^2.0.39"
+pydantic-settings = "^2.8.1"
+pyjwt = "^2.10.1"
+psycopg2 = "^2.9.10"
+alembic = "^1.15.1"
+loguru = "^0.7.3"
+
+
+[tool.poetry.group.dev.dependencies]
+mypy = "^1.15.0"
+ruff = "^0.11.0"
+pytest = "^8.3.5"
+
+[tool.mypy]
+plugins = ['pydantic.mypy']
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
