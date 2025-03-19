@@ -1,6 +1,9 @@
 from fastapi import FastAPI
-from src.settings import get_settings
+from src.settings import settings
+from src.routes import user
 
-settings = get_settings()
+app = FastAPI(
+    title=settings.PROJECT_NAME,
+)
 
-app = FastAPI(title=settings.PROJECT_NAME)
+app.include_router(user.router)

@@ -13,9 +13,8 @@ class Settings(BaseSettings):
     )
 
     SECRET_KEY: str = "1"
+    ALGORITHM: str = "HS256"
 
-    # 60 minutes * 24 hours * 8 days = 8 days
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8
     FRONTEND_HOST: str = "http://localhost:3000"
 
     PROJECT_NAME: str
@@ -29,7 +28,7 @@ class Settings(BaseSettings):
     @property
     def DB_URL(self) -> PostgresDsn:
         return PostgresDsn.build(
-            scheme="postgresql+psycopg",
+            scheme="postgresql+psycopg2",
             username=self.POSTGRES_USER,
             password=self.POSTGRES_PASSWORD,
             host=self.POSTGRES_HOST,
@@ -41,3 +40,6 @@ class Settings(BaseSettings):
 @lru_cache
 def get_settings():
     return Settings()  # type: ignore
+
+
+settings = get_settings()
