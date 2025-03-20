@@ -14,7 +14,11 @@ router = APIRouter(prefix="/task", tags=["task"])
 
 
 @router.get("/search", response_model=list[TaskPublic], status_code=200)
-def search_task_list(session: SessionDep, user: UserDeps, query: Annotated[str, Query()]):
+def search_task_list(
+    session: SessionDep,
+    user: UserDeps,
+    query: Annotated[str, Query()]
+):
     task_list = task_dal.search_task(session, user.id, query, limit=10)
     return task_list
 
