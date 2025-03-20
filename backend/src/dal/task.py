@@ -70,8 +70,8 @@ def search_task(
     limit: int | None = None
 ) -> list[Task]:
     query = session.query(Task).where(Task.user_id == user_id)
-    name_query = query.where(Task.name.like(f"%{q}%"))
-    desc_query = query.where(Task.description.like(f"%{q}%"))
+    name_query = query.where(Task.name.ilike(f"%{q}%"))
+    desc_query = query.where(Task.description.ilike(f"%{q}%"))
     union_query = name_query.union(desc_query)
 
     if limit is not None:
