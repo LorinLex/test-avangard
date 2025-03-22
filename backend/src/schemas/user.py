@@ -37,3 +37,7 @@ class UserAuth(BaseModel):
     @field_serializer('password')
     def dump_secret(self, v):
         return v.get_secret_value()
+
+
+class Token(BaseModel):
+    token: str
