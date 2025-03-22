@@ -10,4 +10,9 @@ declare module 'react' {
   interface InputHTMLAttributes {
     crossOrigin?
   }
+
+  interface SVGAttributes {
+    onPointerEnterCapture?: React.PointerEventHandler
+    onPointerLeaveCapture?: React.PointerEventHandler
+  }
 }

@@ -20,7 +20,7 @@ export const SignInForm: FC<SignInFormProps> = ({ successClb }) => {
   const [ success, setSuccess ] = useState<boolean>(false)
 
   const methods = useForm<SignInFormInput>({
-    mode: "onSubmit",
+    mode: "all",
     defaultValues: { email: "", username: "", password: "" },
   })
 

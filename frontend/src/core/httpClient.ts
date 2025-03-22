@@ -1,5 +1,3 @@
-import axios from "axios"
-
 const BASE_HOST = import.meta.env.BACKEND_URL || "http://localhost:8000/" ||  document.location.origin
 const API_ENDPOINT = import.meta.env.API_ENDPOINT || ""
 const BASE_URL = `${BASE_HOST}/${API_ENDPOINT}`
@@ -8,7 +6,7 @@ const BASE_HEADERS = {
   Accept: 'application/json',
 }
 
-const get_headers = () => {
+export const get_headers = () => {
   const token = localStorage.getItem("Authorization")
   if (token) {
     return {
@@ -19,11 +17,10 @@ const get_headers = () => {
   return BASE_HEADERS
 }
 
-export const axiosIns = axios.create({
+
+export const get_axios_config = () => {
+  return {
     baseURL: BASE_URL,
-    timeout: 1000,
     headers: get_headers()
-});
-
-
-
+  }
+}

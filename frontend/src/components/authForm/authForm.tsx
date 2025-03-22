@@ -10,10 +10,13 @@ enum FormTypeEnum {
 }
 
 
-export const AuthForm: FC = () => {
+export const AuthForm: FC<{
+  hidden: boolean,
+  onLogin: () => void
+}> = ({ hidden, onLogin }) => {
   const [ formType, setFormType ] = useState<FormTypeEnum>(FormTypeEnum.SIGN_IN)
   return (
-    <Card className="w-96">
+    <Card className="w-96" hidden={hidden}>
       <Tabs value={formType} className="">
         <TabsHeader className="">
           <Tab
@@ -31,7 +34,7 @@ export const AuthForm: FC = () => {
         </TabsHeader>
         <TabsBody>
           <TabPanel value={FormTypeEnum.LOGIN}>
-            <LoginForm />
+            <LoginForm successClb={onLogin} />
           </TabPanel>
           <TabPanel value={FormTypeEnum.SIGN_IN}>
             <SignInForm successClb={() => setFormType(FormTypeEnum.LOGIN)}/>

@@ -4,18 +4,19 @@ import { authFetch } from "../../lib/fetchers";
 import { Controller, FormProvider, SubmitHandler, useForm } from "react-hook-form";
 import { EMAIL_REGEXP } from "../../core/utils";
 import { AuthError } from "../../lib/error";
+import { success } from "@material-tailwind/react/types/components/input";
 
 type LoginFormInput = {
   email: string
   password: string
 }
 
-export const LoginForm: FC = () => {
+export const LoginForm: FC<{ successClb: () => void }> = ({ successClb }) => {
   const [ errorMsg, setErrorMsg ] = useState<string | undefined>()
   const [ success, setSuccess ] = useState<boolean>(false)
 
   const methods = useForm<LoginFormInput>({
-    mode: "onSubmit",
+    mode: "all",
     defaultValues: { email: "", password: "" },
   })
 
@@ -29,6 +30,7 @@ export const LoginForm: FC = () => {
       await authFetch(data)
       setSuccess(true)
       setErrorMsg(undefined)
+      successClb()
     } catch (e) {
       if (e instanceof AuthError) {
         setSuccess(false)
