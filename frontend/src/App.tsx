@@ -16,7 +16,7 @@ function App() {
       "place-content-center",
       "place-items-center"
     ].join(" ")}>
-      {!isLoading && (
+      {isLoading && (
         <div className={[
           "absolute",
           "h-screen",
@@ -30,8 +30,9 @@ function App() {
           <Spinner className="h-12 w-12" />
         </div>
       )}
-      <div hidden={user !== undefined}>Test</div>
-      <AuthForm hidden={user === undefined} onLogin={() => mutate()} />
+      {user !== undefined ? <TaskSection /> : (
+        <AuthForm onLogin={() => mutate()} />
+      )}
     </div>
   )
 }
