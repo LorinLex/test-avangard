@@ -1,16 +1,17 @@
 import { createContext, FC, PropsWithChildren, useReducer } from 'react';
-import { Actions } from './actions';
+import { ActionTypes } from './actions';
 import { reducer } from './reducers';
 import { DeadlineEnum, StateType, TaskStatusEnum } from './types';
 
 export type StateContextType = {
   state: StateType,
-  dispatch: React.Dispatch<Actions>,
+  dispatch: React.Dispatch<ActionTypes>,
 };
 
 const initialState: StateType = {
   status: TaskStatusEnum.ALL,
-  deadline: DeadlineEnum.ALL
+  deadline: DeadlineEnum.ALL,
+  search_query: ""
 }
 
 export const StateContext = createContext<StateContextType>({

@@ -71,7 +71,10 @@ type TaskListPaginated = {
 
 export const getTaskList: Fetcher<
   TaskListPaginated, {
-    page: number, status: TaskStatusEnum, deadline: DeadlineEnum
+    page: number,
+    status: TaskStatusEnum,
+    deadline: DeadlineEnum,
+    search_query: string
   }> = async ({ page, status, deadline }) => {
     const page_size = 5
     let url = `/task?page=${page}&size=${page_size}`

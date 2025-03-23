@@ -16,4 +16,5 @@ export enum TaskStatusEnum {
 export type StateType = {
   status: TaskStatusEnum,
   deadline: DeadlineEnum
+  search_query: string
 }

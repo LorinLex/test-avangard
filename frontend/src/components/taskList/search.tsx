@@ -3,22 +3,19 @@ import { FC, useContext } from "react"
 import { DeadlineEnum, TaskStatusEnum } from "../../lib/state/types"
 import { StateContext, StateContextType } from "../../lib/state/context";
 import SelectOption from "@material-tailwind/react/components/Select/SelectOption";
-import { getEnumKeyByEnumValue } from "../../core/utils";
+import { setDeadlineActionCreator, setSearchQueryActionCreator, setTaskStatusActionCreator } from "../../lib/state/actions";
 
 export const SearchAndFilter: FC = () => {
   const { state, dispatch } = useContext<StateContextType>(StateContext)
 
   const setDeadline = (deadline: string) =>
-    dispatch({
-      type: "SET_DEADLINE",
-      payload: DeadlineEnum[getEnumKeyByEnumValue(DeadlineEnum, deadline)]
-    })
+    dispatch(setDeadlineActionCreator(deadline))
 
   const setStatus = (status: string) =>
-    dispatch({
-      type: "SET_STATUS",
-      payload: TaskStatusEnum[getEnumKeyByEnumValue(TaskStatusEnum, status)]
-    })
+    dispatch(setTaskStatusActionCreator(status))
+
+  const setQuery = (query: string) =>
+    dispatch(setSearchQueryActionCreator(query))
 
   return (
     <Card className="max-w-full">
@@ -39,7 +36,13 @@ export const SearchAndFilter: FC = () => {
           "row-start-1",
           "row-end-1"
         ].join(" ")}>
-          <Input name="search" label="Search" placeholder="name or description..."/>
+          <Input
+            name="search"
+            label="Search"
+            placeholder="name or description..."
+            onChange={(e) => setQuery(e.currentTarget.value)}
+            value={state.search_query}
+          />
         </div>
         <div className={[
           "col-start-1",

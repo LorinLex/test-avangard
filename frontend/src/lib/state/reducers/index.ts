@@ -1,8 +1,8 @@
-import { DeadlineActionTypes, TaskStatusActionTypes, Actions } from '../actions'
+import { DeadlineActionTypes, TaskStatusActionTypes, ActionTypes, SearchActionTypes } from '../actions'
 import { StateType } from '../types'
 
 
-export function reducer(state: StateType, action: Actions) {
+export function reducer(state: StateType, action: ActionTypes) {
   switch (action.type) {
     case DeadlineActionTypes.SET_DEADLINE:
       return {
@@ -14,6 +14,12 @@ export function reducer(state: StateType, action: Actions) {
       return {
         ...state,
         status: action.payload,
+      }
+
+    case SearchActionTypes.SET_SEARCH_QUERY:
+      return {
+        ...state,
+        search_query: action.payload,
       }
 
     default:

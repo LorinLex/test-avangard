@@ -23,7 +23,8 @@ export const TaskSection: FC = () => {
     ([ _, page, state]) => getTaskList({
       page,
       status: state.status,
-      deadline: state.deadline
+      deadline: state.deadline,
+      search_query: state.search_query
     })
   )
 
