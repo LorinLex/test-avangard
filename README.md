@@ -64,6 +64,11 @@ npm i
     ```bash
 
     cd backend
+
+    # Проводим миграции
+    alembic upgrade head
+
+    # Запускаем
     uvicorn src.app:app
 
     ```
