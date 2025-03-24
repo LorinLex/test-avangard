@@ -6,8 +6,8 @@ from src.models.task import TaskStatusEnum
 
 
 class DeadlineFilterEnum(Enum):
-    ACTUAL = "actual"
-    MISSED = "missed"
+    ACTUAL = "Actual"
+    MISSED = "Missed"
 
 
 class BaseTask(BaseModel):

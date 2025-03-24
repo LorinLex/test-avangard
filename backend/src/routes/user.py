@@ -3,9 +3,10 @@ from sqlalchemy.exc import NoResultFound
 
 from src.dal.user import create_user, get_user
 from src.exceptions import AuthException, EmailDuplicate
-from src.schemas.user import UserAuth, UserCreate, UserPublic
+from src.schemas.user import Token, UserAuth, UserCreate, UserPublic
 from src.db import SessionDep
 from src.utils import encode_jwt, verify_hashed
+from src.dependencies import UserDeps
 
 
 router = APIRouter(prefix="/user", tags=["user"])
@@ -30,7 +31,7 @@ def register(data: UserCreate, session: SessionDep):
 
 @router.post(
     path="/auth",
-    response_model=UserPublic,
+    response_model=Token,
     responses={
         200: {"description": "Authorization successful"},
         400: {"description": "Wrong email or password"},
@@ -52,5 +53,20 @@ def auth(response: Response, data: UserAuth, session: SessionDep):
 
     token = encode_jwt(data.model_dump(include={"email": True}))
 
-    response.headers["Authorization"] = f"Bearer {token}"
-    return user_db
+    return {
+        "token": token
+    }
+
+
+@router.get(
+    path="/me",
+    response_model=UserPublic,
+    responses={
+        200: {"description": "Authentication successful"},
+        400: {"description": "Wrong token"},
+    },
+    description="User authentication route. "
+                "On success sends in body user data."
+)
+def me(user: UserDeps):
+    return user
