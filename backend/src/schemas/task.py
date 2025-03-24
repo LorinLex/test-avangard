@@ -49,6 +49,7 @@ class PaginateParams(BaseModel):
 class FilterParams(PaginateParams):
     status: TaskStatusEnum | None = None
     deadline: DeadlineFilterEnum | None = None
+    search_query: str | None = None
 
 
 class TaskPaginated(PaginateParams):

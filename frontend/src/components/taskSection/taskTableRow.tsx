@@ -64,7 +64,7 @@ export const TaskTableRow: FC<TaskTableRowProps> = ({
           variant="small"
           className={`font-normal text-gray-600 ${typoClasses}`}
         >
-          {deadline.toDateString()}
+          {deadline.toISOString().split('T')[0]}
         </Typography>
       </td>
     </tr>

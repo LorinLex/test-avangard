@@ -11,10 +11,15 @@ def get_task_list(
     page: int = 1,
     size: int = 10,
     status: TaskStatusEnum | None = None,
-    deadline: DeadlineFilterEnum | None = None
+    deadline: DeadlineFilterEnum | None = None,
+    search_query: str | None = None
 ) -> tuple[list[Task], int]:
     query = session.query(Task).where(Task.user_id == user_id)
 
+    if search_query is not None:
+        name_query = query.where(Task.name.ilike(f"%{search_query}%"))
+        desc_query = query.where(Task.description.ilike(f"%{search_query}%"))
+        query = name_query.union(desc_query)
     if status is not None:
         query = query.where(Task.status == status)
     if deadline == DeadlineFilterEnum.ACTUAL:
@@ -61,20 +66,3 @@ def delete_task(session: Session, task_id: int, user_id: int) -> None:
         raise ValueError("Task belongs to someone else")
     session.delete(task_db)
     session.commit()
-
-
-def search_task(
-    session: Session,
-    user_id: int,
-    q: str,
-    limit: int | None = None
-) -> list[Task]:
-    query = session.query(Task).where(Task.user_id == user_id)
-    name_query = query.where(Task.name.ilike(f"%{q}%"))
-    desc_query = query.where(Task.description.ilike(f"%{q}%"))
-    union_query = name_query.union(desc_query)
-
-    if limit is not None:
-        union_query = union_query.limit(limit)
-
-    return union_query.all()
