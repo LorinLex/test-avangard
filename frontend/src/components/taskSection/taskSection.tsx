@@ -56,7 +56,7 @@ export const TaskSection: FC<{ userId: number }> = ({ userId }) => {
       page,
       status: state.status,
       deadline: state.deadline,
-      search_query: state.search_query
+      searchQuery: state.search_query
     })
   )
 

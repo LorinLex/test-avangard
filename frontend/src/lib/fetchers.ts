@@ -103,15 +103,18 @@ export const getTaskList: Fetcher<
     page: number,
     status: TaskStatusEnum,
     deadline: DeadlineEnum,
-    search_query: string
+    searchQuery: string
   }
-> = async ({ page, status, deadline }) => {
+> = async ({ page, status, deadline, searchQuery }) => {
   const page_size = 10
   let url = `/task?page=${page}&size=${page_size}`
   if (status !== TaskStatusEnum.ALL)
     url += `&status=${status}`
   if (deadline !== DeadlineEnum.ALL)
     url += `&deadline=${deadline}`
+  if (searchQuery !== "") {
+    url += `&search_query=${searchQuery}`
+  }
 
   const response = await axios.get<TaskListPaginatedRaw>(url, get_axios_config())
   const processedTasksData: Task[] = response.data.data.map((value) => {
