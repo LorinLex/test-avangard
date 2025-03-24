@@ -15,7 +15,7 @@ class Settings(BaseSettings):
     SECRET_KEY: str = "1"
     ALGORITHM: str = "HS256"
 
-    FRONTEND_HOST: str = "http://localhost:3000"
+    FRONTEND_HOST: str = "http://localhost:5173"
 
     PROJECT_NAME: str
 
