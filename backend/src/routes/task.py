@@ -8,6 +8,7 @@ from src.schemas.task import FilterParams, TaskCreate, TaskPaginated, \
 from src.db import SessionDep
 from src.dependencies import UserDeps
 from src.dal import task as task_dal
+from src.routes.websockets import ws_manager
 
 
 router = APIRouter(prefix="/task", tags=["task"])
@@ -52,8 +53,14 @@ def get_task_list(
     response_model=TaskPublic,
     status_code=status.HTTP_201_CREATED
 )
-def create_task(session: SessionDep, user: UserDeps, data: TaskCreate):
-    return task_dal.create_task(session, task=data, user_id=user.id)
+async def create_task(session: SessionDep, user: UserDeps, data: TaskCreate):
+    task = task_dal.create_task(session, task=data, user_id=user.id)
+    serialized = TaskPublic.model_validate(task, from_attributes=True)
+    await ws_manager.send_create_task(
+        user_id=user.id,
+        task_data=serialized
+    )
+    return serialized
 
 
 @router.put(
@@ -61,19 +68,25 @@ def create_task(session: SessionDep, user: UserDeps, data: TaskCreate):
     response_model=TaskUpdate,
     status_code=status.HTTP_200_OK
 )
-def update_task(
+async def update_task(
     session: SessionDep,
     user: UserDeps,
     task_id: int,
     data: TaskUpdate
 ):
     try:
-        return task_dal.update_task(
+        task = task_dal.update_task(
             session,
             data,
             task_id=task_id,
             user_id=user.id
         )
+        serialized = TaskPublic.model_validate(task, from_attributes=True)
+        await ws_manager.send_update_task(
+            user_id=user.id,
+            task_data=serialized
+        )
+        return serialized
     except NoResultFound:
         raise NoTask()
     except ValueError:
@@ -81,9 +94,13 @@ def update_task(
 
 
 @router.delete("/{task_id}", status_code=status.HTTP_200_OK)
-def delete_task(session: SessionDep, user: UserDeps, task_id: int):
+async def delete_task(session: SessionDep, user: UserDeps, task_id: int):
     try:
         task_dal.delete_task(session, task_id=task_id, user_id=user.id)
+        await ws_manager.send_delete_task(
+            user_id=user.id,
+            task_id=task_id
+        )
     except NoResultFound:
         raise NoTask()
     except ValueError:
