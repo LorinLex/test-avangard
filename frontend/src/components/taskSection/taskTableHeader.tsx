@@ -1,5 +1,5 @@
 import { Typography } from "@material-tailwind/react";
-import { FC, PropsWithChildren } from "react";
+import { FC } from "react";
 
 export const TaskTableHeader: FC = () => {
   const classes = [

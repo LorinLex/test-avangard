@@ -1,5 +1,5 @@
 import { FC, useContext, useState } from "react";
-import { Card, IconButton, Typography } from "@material-tailwind/react";
+import { Card, IconButton } from "@material-tailwind/react";
 import useSWR from "swr";
 import { getTaskList } from "../../lib/fetchers";
 import { Pagination } from "./pagination";
