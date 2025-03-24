@@ -11,6 +11,7 @@ type TaskCardProps = {
     status: TaskStatusEnum
     deadline: Date
     onClose: () => void
+    onSuccess: () => void
 }
 
 export const TaskCard: FC<TaskCardProps> = ({
@@ -19,7 +20,8 @@ export const TaskCard: FC<TaskCardProps> = ({
   description,
   status,
   deadline,
-  onClose
+  onClose,
+  onSuccess
 }) => {
   const [ isEdit, setIsEdit ] = useState<boolean>(false)
 
@@ -27,6 +29,8 @@ export const TaskCard: FC<TaskCardProps> = ({
     const fn = async () => await editTask({ id, data })
     fn()
     setIsEdit(false)
+    onSuccess()
+    onClose()
   }
 
   if (!isEdit) {
@@ -40,6 +44,7 @@ export const TaskCard: FC<TaskCardProps> = ({
         onEdit={() => setIsEdit(true)}
         onDelete={() => {
           deleteTask({ id: id })
+          onSuccess()
           onClose()
         }}
       />

@@ -10,6 +10,12 @@ class DeadlineFilterEnum(Enum):
     MISSED = "Missed"
 
 
+class TaskActionEnum(Enum):
+    CREATED = "Created"
+    UPDATED = "Updated"
+    DELETED = "Deleted"
+
+
 class BaseTask(BaseModel):
     name: str | None
     description: str | None
@@ -48,3 +54,13 @@ class FilterParams(PaginateParams):
 class TaskPaginated(PaginateParams):
     total: int = Field(ge=0)
     data: list[TaskPublic] = []
+
+
+class TaskWSActionDelete(BaseModel):
+    action: TaskActionEnum
+    data: dict[str, int]
+
+
+class TaskWSActionCreateUpdate(BaseModel):
+    action: TaskActionEnum
+    data: TaskPublic

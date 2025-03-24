@@ -1,4 +1,4 @@
-import { get_axios_config } from "../core/httpClient"
+import { get_axios_config } from "../core/webClient"
 import { Fetcher } from 'swr'
 import axios from "axios"
 import { getEnumKeyByEnumValue } from "../core/utils"
@@ -16,11 +16,26 @@ type UserCreate = UserAuth & {
 }
 
 type UserPublic = {
-    id: number
-    email: string
-    username: string
+  id: number
+  email: string
+  username: string
 }
 
+export type TaskRaw = {
+  id: number
+  name: string
+  description: string
+  status: string,
+  deadline: string
+}
+
+type Task = {
+  id: number
+  name: string
+  description: string
+  status: TaskStatusEnum,
+  deadline: Date
+}
 
 export const authFetch: Fetcher<void, UserAuth> = async (data) => {
   try {
@@ -53,21 +68,6 @@ export const meFetch: Fetcher<UserPublic> = async () => {
   }
 }
 
-type TaskRaw = {
-  id: number
-  name: string
-  description: string
-  status: string,
-  deadline: string
-}
-
-type Task = {
-  id: number
-  name: string
-  description: string
-  status: TaskStatusEnum,
-  deadline: Date
-}
 
 export type TaskCreate = {
   name: string
@@ -90,7 +90,7 @@ type TaskListPaginatedRaw = {
   data: TaskRaw[]
 }
 
-type TaskListPaginated = {
+export type TaskListPaginated = {
   page: number,
   size: number,
   total: number,

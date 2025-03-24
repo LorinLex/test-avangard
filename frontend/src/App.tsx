@@ -30,7 +30,7 @@ function App() {
           <Spinner className="h-12 w-12" />
         </div>
       )}
-      {user !== undefined ? <TaskSection /> : (
+      {user !== undefined ? <TaskSection userId={user.id}/> : (
         <AuthForm onLogin={() => mutate()} />
       )}
     </div>

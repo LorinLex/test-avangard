@@ -16,6 +16,7 @@ alembic = "^1.15.1"
 loguru = "^0.7.3"
 uvicorn = "^0.34.0"
 pydantic = {extras = ["email"], version = "^2.10.6"}
+websockets = "^15.0.1"
 
 
 [tool.poetry.group.dev.dependencies]
