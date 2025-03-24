@@ -64,6 +64,7 @@ npm i
     ```bash
 
     cd backend
+    poetry shell
 
     # Проводим миграции
     alembic upgrade head
