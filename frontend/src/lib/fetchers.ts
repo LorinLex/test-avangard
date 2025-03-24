@@ -1,7 +1,7 @@
-import { get_axios_config, get_headers } from "../core/httpClient"
-import useSWR, { Fetcher } from 'swr'
+import { get_axios_config } from "../core/httpClient"
+import { Fetcher } from 'swr'
 import axios from "axios"
-import { setCookie } from "../core/utils"
+import { getEnumKeyByEnumValue } from "../core/utils"
 import { AuthError, SignInError } from "./error"
 import { DeadlineEnum, TaskStatusEnum } from "./state/types"
 
@@ -53,12 +53,41 @@ export const meFetch: Fetcher<UserPublic> = async () => {
   }
 }
 
-type Task = {
+type TaskRaw = {
   id: number
   name: string
   description: string
   status: string,
   deadline: string
+}
+
+type Task = {
+  id: number
+  name: string
+  description: string
+  status: TaskStatusEnum,
+  deadline: Date
+}
+
+export type TaskCreate = {
+  name: string
+  description: string
+  status: TaskStatusEnum,
+  deadline: Date
+}
+
+export type TaskEdit = {
+  name?: string
+  description?: string
+  status?: TaskStatusEnum,
+  deadline?: Date
+}
+
+type TaskListPaginatedRaw = {
+  page: number,
+  size: number,
+  total: number,
+  data: TaskRaw[]
 }
 
 type TaskListPaginated = {
@@ -68,25 +97,76 @@ type TaskListPaginated = {
   data: Task[]
 }
 
-
 export const getTaskList: Fetcher<
-  TaskListPaginated, {
+  TaskListPaginated,
+  {
     page: number,
     status: TaskStatusEnum,
     deadline: DeadlineEnum,
     search_query: string
-  }> = async ({ page, status, deadline }) => {
-    const page_size = 5
-    let url = `/task?page=${page}&size=${page_size}`
-    if (status !== TaskStatusEnum.ALL)
-      url += `&status=${status}`
-    if (deadline !== DeadlineEnum.ALL)
-      url += `&deadline=${deadline}`
-
-    try {
-      const response = await axios.get(url, get_axios_config())
-      return response.data
-    } catch (e) {
-      console.error(e)
-    }
   }
+> = async ({ page, status, deadline }) => {
+  const page_size = 10
+  let url = `/task?page=${page}&size=${page_size}`
+  if (status !== TaskStatusEnum.ALL)
+    url += `&status=${status}`
+  if (deadline !== DeadlineEnum.ALL)
+    url += `&deadline=${deadline}`
+
+  const response = await axios.get<TaskListPaginatedRaw>(url, get_axios_config())
+  const processedTasksData: Task[] = response.data.data.map((value) => {
+    return {
+      ...value,
+      status: TaskStatusEnum[getEnumKeyByEnumValue(TaskStatusEnum, value.status)],
+      deadline: new Date(value.deadline)
+    }
+  })
+  return {
+    ...response.data,
+    data: processedTasksData
+  }
+}
+
+export const createTask: Fetcher<void, TaskCreate> = async (data) => {
+  const url = '/task'
+
+  try {
+    await axios.post(url, {
+      ...data,
+      deadline: data.deadline.toISOString().split('T')[0]
+    }, get_axios_config())
+  } catch (e) {
+    console.error(e)
+  }
+}
+
+export const editTask: Fetcher<void, {
+  id: number, data: TaskEdit
+}> = async ({ id, data }) => {
+  const url = `/task/${id}`
+  let processed_data;
+  if ("deadline" in data && data.deadline !== undefined) {
+    processed_data = {
+      ...data,
+      deadline: data.deadline.toISOString().split('T')[0]
+    }
+  } else {
+    processed_data = data
+  }
+
+  try {
+    await axios.put(url, processed_data, get_axios_config())
+  } catch (e) {
+    console.error(e)
+  }
+}
+
+export const deleteTask: Fetcher<void, { id: number }> = async ({ id }) => {
+  const url = `/task/${id}`
+
+  try {
+    await axios.delete(url, get_axios_config())
+  } catch (e) {
+    console.error(e)
+  }
+}

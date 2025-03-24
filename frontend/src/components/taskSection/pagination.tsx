@@ -19,7 +19,7 @@ export const Pagination: FC<PaginationProps> = ({
     } as any)
 
   const next = () => {
-    if (current === total_pages) return;
+    if (current >= total_pages) return;
     setCurrent(current + 1);
   }
 
@@ -54,7 +54,7 @@ export const Pagination: FC<PaginationProps> = ({
         variant="text"
         className="flex items-center gap-2"
         onClick={next}
-        disabled={current === total_pages}
+        disabled={current >= total_pages}
       >
         Next
         <ArrowRightIcon strokeWidth={2} className="h-4 w-4" />

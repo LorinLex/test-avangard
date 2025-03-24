@@ -1,11 +1,11 @@
 import useSWR from 'swr'
 import { AuthForm } from './components/authForm/authForm'
 import { meFetch } from './lib/fetchers'
-import { TaskSection } from './components/taskList'
+import { TaskSection } from './components/taskSection'
 import { Spinner } from '@material-tailwind/react'
 
 function App() {
-  const { data: user, isLoading, mutate, error } = useSWR("/user/me", meFetch, {
+  const { data: user, isLoading, mutate } = useSWR("/user/me", meFetch, {
     shouldRetryOnError: false
   })
   return (
