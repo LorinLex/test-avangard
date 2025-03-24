@@ -49,7 +49,7 @@ export const TaskCardRead: FC<TaskCardReadProps> = ({
           <Typography>
             Deadline:
           </Typography>
-          <Input variant="standard" value={deadline.toDateString()} readOnly/>
+          <Input variant="standard" value={deadline.toISOString().split('T')[0]} readOnly/>
         </div>
         <ButtonGroup fullWidth>
           <Button onClick={() => onEdit(id)}>Edit</Button>

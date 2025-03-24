@@ -14,6 +14,7 @@ export const SingleCardWrapper: FC<SingleCardWrapperProps> = ({
     "flex",
     "place-content-center",
     "place-items-center",
+    "z-20"
   ].join(" ")}>
     <div
       className={[

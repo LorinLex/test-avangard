@@ -175,8 +175,14 @@ export const TaskSection: FC<{ userId: number }> = ({ userId }) => {
         </SingleCardWrapper>
       : ""}
       {isCreating ?
-        <SingleCardWrapper onClose={() => setCreating(false)}>
-          <TaskCardCreate onClose={() => setCreating(false)}/>
+        <SingleCardWrapper onClose={() => {
+          setCreating(false)
+          setAlertType(AlertType.SUCCESS)
+        }}>
+          <TaskCardCreate onClose={() => {
+            setCreating(false)
+            setAlertType(AlertType.SUCCESS)
+          }}/>
         </SingleCardWrapper>
       : ""}
       {alertType === AlertType.SUCCESS ? (

@@ -113,7 +113,8 @@ export const TaskCardEdit: FC<TaskCardEditProps> = ({
               "placeholder-gray-400",
             ].join(" ")}
             readOnly={true}
-            displayFormat="DD/MM/YYYY"
+            displayFormat="YYYY-MM-DD"
+            popoverDirection="up"
             onChange={(val) => setNewDeadline(val?.startDate || null)}
           />
         </div>
