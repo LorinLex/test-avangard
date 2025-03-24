@@ -14,16 +14,6 @@ from src.routes.websockets import ws_manager
 router = APIRouter(prefix="/task", tags=["task"])
 
 
-@router.get("/search", response_model=list[TaskPublic], status_code=200)
-def search_task_list(
-    session: SessionDep,
-    user: UserDeps,
-    query: Annotated[str, Query()]
-):
-    task_list = task_dal.search_task(session, user.id, query, limit=10)
-    return task_list
-
-
 @router.get(
     "",
     response_model=TaskPaginated,
@@ -37,7 +27,7 @@ def get_task_list(
     task_list_page, total = task_dal.get_task_list(
         session,
         user.id,
-        **query.model_dump()
+        **query.model_dump(exclude_unset=True)
     )
 
     return {
